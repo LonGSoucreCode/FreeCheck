@@ -14,9 +14,11 @@ namespace FreeCheck.Gateway.Controllers
     public class ShoeController : ControllerBase
     {
         public ILogic<GetListShoeCheckParam, GetListShoeCheckResult> _getListShoeCheckLogic;
-        public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic)
+        public ILogger<ShoeController> _logger;
+        public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic, ILogger<ShoeController> logger)
         {
             _getListShoeCheckLogic = getListShoeCheckLogic;
+            _logger = logger;
         }
 
         [HttpGet("Shoes-Authen"), Authorize(Roles = "Admin")]
@@ -38,6 +40,7 @@ namespace FreeCheck.Gateway.Controllers
         [HttpGet("Shoes")]
         public ResponseResultData<GetListShoeCheckResult?> GetListShoeCheck([FromQuery] GetListShoeCheckParam param)
         {
+            _logger.LogInformation("Execute: GetListShoeCheck {param} ", param);
             var resultData = _getListShoeCheckLogic.Execute(param);
 
             if (resultData?.Result == true)

@@ -20,17 +20,25 @@ namespace FreeCheck.Repository.Infrastructure.Repositories.Implements
         }
         public List<GetListShoeResult> GetListShoeCheck(GetListShoeCheckParam param)
         {
-            var resultData = _freeCheckDbContext.ShoeCheck.Where(s => s.IsDeleted != false).OrderByDescending(o => o.CreationTime)
-                    .Skip((param.Page - 1) * param.PageSize)
-                    .Take(param.PageSize)
-                    .ToList().Select(s => new GetListShoeResult()
-                    {
-                        Id = s.Id,
-                        Code = s.Code,
-                        Name = s.Name,
-                        StatusChecker = s.StatusChecker,
-                        CheckDateTime = s.CheckDateTime
-                    }).ToList();
+            //var resultData = _freeCheckDbContext.ShoeCheck.Where(s => s.IsDeleted != false).OrderByDescending(o => o.CreationTime)
+            //        .Skip((param.Page - 1) * param.PageSize)
+            //        .Take(param.PageSize)
+            //        .ToList().Select(s => new GetListShoeResult()
+            //        {
+            //            Id = s.Id,
+            //            Code = s.Code,
+            //            Name = s.Name,
+            //            StatusChecker = s.StatusChecker,
+            //            CheckDateTime = s.CheckDateTime
+            //        }).ToList();
+
+            var resultData = new List<GetListShoeResult>();
+            resultData.Add(new GetListShoeResult
+            {
+                Id = Guid.NewGuid(),
+                Code = "",
+                Name = "Air Jordan"
+            });
 
             return resultData;
         }

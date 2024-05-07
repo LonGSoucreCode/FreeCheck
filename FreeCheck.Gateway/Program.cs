@@ -21,25 +21,54 @@ IConfiguration GetConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Configuration
-
-builder.Services.AddDbContext<FreeCheckDbContext>(option => option.UseSqlServer("name=ConnectionStrings:FreeCheckDb"));
-
 // Add services to the container.
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    option.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    //option.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    //{
+    //    In = ParameterLocation.Header,
+    //    Name = "Authorization",
+    //    Type = SecuritySchemeType.ApiKey
+    //});
+
+    // option.SwaggerDoc("v1", new OpenApiInfo { Title = "CTV PRODUCT" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
     });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
 
-    option.OperationFilter<SecurityRequirementsOperationFilter>();
+    //option.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
@@ -67,10 +96,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+app.UseCors();
 
 app.Run();
 
@@ -83,5 +111,7 @@ static void RegisterLogic(WebApplicationBuilder builder)
 
 static void RegisterRepository(WebApplicationBuilder builder)
 {
+    // Add Configuration
+    builder.Services.AddDbContext<FreeCheckDbContext>(option => option.UseSqlServer("name=ConnectionStrings:FreeCheckDb"));
     builder.Services.AddScoped<IShoeCheckRepository, ShoeCheckRepository>();
 }

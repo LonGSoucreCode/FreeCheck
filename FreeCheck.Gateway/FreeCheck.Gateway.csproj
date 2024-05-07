@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FreeCheck.BusinessLogic\FreeCheck.BusinessLogic.csproj" />
     <ProjectReference Include="..\FreeCheck.DTO\FreeCheck.DTO.csproj" />
+    <ProjectReference Include="..\FreeCheck.Helper\FreeCheck.Helper.csproj" />
     <ProjectReference Include="..\FreeCheck.Repository\FreeCheck.Repository.csproj" />
   </ItemGroup>
 

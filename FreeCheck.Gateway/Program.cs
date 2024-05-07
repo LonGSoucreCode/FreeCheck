@@ -4,6 +4,11 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FreeCheck.BusinessLogic;
+using FreeCheck.DTO.Params;
+using FreeCheck.DTO.Results;
+using FreeCheck.Repository.Infrastructure.Repositories.Implements;
+using FreeCheck.Repository.Infrastructure.Repositories.Interfaces;
 
 IConfiguration GetConfiguration()
 {
@@ -48,6 +53,10 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
+RegisterLogic(builder);
+
+RegisterRepository(builder);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -64,3 +73,15 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
+static void RegisterLogic(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<ILogic<GetListShoeCheckParam, GetListShoeCheckResult>, GetListShoeCheckLogic>();
+}
+
+static void RegisterRepository(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IShoeCheckRepository, ShoeCheckRepository>();
+}

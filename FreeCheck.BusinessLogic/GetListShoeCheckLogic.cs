@@ -30,16 +30,7 @@ namespace FreeCheck.BusinessLogic
 
                 resultData.Data = _shoeCheckReposity.GetListShoeCheck(param);
 
-                //resultData.Data.Add(new GetListShoeResult
-                //{
-                //    Id = Guid.NewGuid(),
-                //    Code = "",
-                //    Name = "Air Jordan"
-                //});
-
-
-
-                resultData.Result = true;
+                //resultData.Result = true;
 
                 return resultData;
             }

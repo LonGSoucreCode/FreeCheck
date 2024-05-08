@@ -6,6 +6,7 @@ using FreeCheck.Helper;
 using FreeCheck.Repository.Infrastructure.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace FreeCheck.Gateway.Controllers
 {
@@ -14,11 +15,9 @@ namespace FreeCheck.Gateway.Controllers
     public class ShoeController : ControllerBase
     {
         public ILogic<GetListShoeCheckParam, GetListShoeCheckResult> _getListShoeCheckLogic;
-        public ILogger<ShoeController> _logger;
-        public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic, ILogger<ShoeController> logger)
+        public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic)
         {
             _getListShoeCheckLogic = getListShoeCheckLogic;
-            _logger = logger;
         }
 
         [HttpGet("Shoes-Authen"), Authorize(Roles = "Admin")]
@@ -40,15 +39,17 @@ namespace FreeCheck.Gateway.Controllers
         [HttpGet("Shoes")]
         public ResponseResultData<GetListShoeCheckResult?> GetListShoeCheck([FromQuery] GetListShoeCheckParam param)
         {
-            _logger.LogInformation("Execute: GetListShoeCheck {param} ", param);
+            Log.Information("Start GetListShoeCheck {@param}", param);
             var resultData = _getListShoeCheckLogic.Execute(param);
 
             if (resultData?.Result == true)
             {
+                Log.Information($"End GetListShoeCheck {resultData.Data}");
                 return ResponseHelper<GetListShoeCheckResult>.ResOK(resultData);
             }
             else
             {
+                Log.Error($"End GetListShoeCheck {resultData?.Desc}");
                 return ResponseHelper<GetListShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData.Code, Desc = resultData.Desc } });
             }
         }

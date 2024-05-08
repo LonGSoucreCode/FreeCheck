@@ -9,6 +9,7 @@ using FreeCheck.DTO.Params;
 using FreeCheck.DTO.Results;
 using FreeCheck.Repository.Infrastructure.Repositories.Implements;
 using FreeCheck.Repository.Infrastructure.Repositories.Interfaces;
+using Serilog;
 
 IConfiguration GetConfiguration()
 {
@@ -82,6 +83,11 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
     };
 });
 
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Host.UseSerilog();
+
 RegisterLogic(builder);
 
 RegisterRepository(builder);
@@ -95,6 +101,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

@@ -2,6 +2,7 @@ using FreeCheck.BusinessLogic;
 using FreeCheck.DTO.Common;
 using FreeCheck.DTO.Params;
 using FreeCheck.DTO.Results;
+using FreeCheck.Gateway.Middlewares;
 using FreeCheck.Helper;
 using FreeCheck.Repository.Infrastructure.Entity;
 using Microsoft.AspNetCore.Authorization;
@@ -12,28 +13,13 @@ namespace FreeCheck.Gateway.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [TypeFilter(typeof(AuthorizeUserAttribute))]
     public class ShoeController : ControllerBase
     {
         public ILogic<GetListShoeCheckParam, GetListShoeCheckResult> _getListShoeCheckLogic;
         public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic)
         {
             _getListShoeCheckLogic = getListShoeCheckLogic;
-        }
-
-        [HttpGet("Shoes-Authen"), Authorize(Roles = "Admin")]
-        public ActionResult<ShoeCheck> GetListShoeCheckAuthen()
-        {
-            var result = new List<ShoeCheck>();
-
-            result.Add(new ShoeCheck
-            {
-                Id = Guid.NewGuid(),
-                Code = "",
-                Name = "Air Jordan"
-
-            });
-
-            return Ok(result);
         }
 
         [HttpGet("Shoes")]

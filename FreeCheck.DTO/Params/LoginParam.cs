@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace FreeCheck.DTO.Params
 {
-    public interface IParam
+    public class LoginParam
     {
+        public required string User { get; set; }
+        public required string Password { get; set; }
     }
 }

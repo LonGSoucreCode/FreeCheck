@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreeCheck.BusinessLogic
+namespace FreeCheck.BusinessLogic.GhoeCheckLogic
 {
     public class GetListShoeCheckLogic : ILogic<GetListShoeCheckParam, GetListShoeCheckResult>
     {

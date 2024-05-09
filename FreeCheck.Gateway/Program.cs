@@ -9,21 +9,17 @@ using FreeCheck.DTO.Params;
 using FreeCheck.DTO.Results;
 using FreeCheck.Repository.Infrastructure.Repositories.Implements;
 using FreeCheck.Repository.Infrastructure.Repositories.Interfaces;
+using FreeCheck.BusinessLogic.GhoeCheckLogic;
 using Serilog;
+using FreeCheck.BusinessLogic.AuthenticateLogic;
+using FreeCheck.Helper.JwtToken;
+using FreeCheck.Gateway.Middlewares;
 
-IConfiguration GetConfiguration()
-{
-    var builder = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddEnvironmentVariables();
-    return builder.Build();
-}
 
+var configuration = GetConfiguration();
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add Cors
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -37,13 +33,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
-    //option.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    //{
-    //    In = ParameterLocation.Header,
-    //    Name = "Authorization",
-    //    Type = SecuritySchemeType.ApiKey
-    //});
-
     // option.SwaggerDoc("v1", new OpenApiInfo { Title = "CTV PRODUCT" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -55,42 +44,28 @@ builder.Services.AddSwaggerGen(option =>
         Scheme = "Bearer"
     });
     option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
-                            }
-                        },
-                        new string[]{}
-                    }
-                });
-
-    //option.OperationFilter<SecurityRequirementsOperationFilter>();
-});
-builder.Services.AddAuthentication().AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuerSigningKey = true,
-        ValidateAudience = false,
-        ValidateIssuer = false,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            builder.Configuration.GetSection("AppSettings:Token").Value!))
-    };
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
 });
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration).CreateLogger();
-
-builder.Host.UseSerilog();
+RegisterLogger(builder);
 
 RegisterLogic(builder);
 
 RegisterRepository(builder);
+
+RegisterLibraries(builder);
 
 var app = builder.Build();
 
@@ -106,19 +81,43 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.UseCors();
-
 app.Run();
 
 
+static IConfiguration GetConfiguration()
+{
+    var builder = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables();
+    return builder.Build();
+}
 
 static void RegisterLogic(WebApplicationBuilder builder)
 {
-    builder.Services.AddScoped<ILogic<GetListShoeCheckParam, GetListShoeCheckResult>, GetListShoeCheckLogic>();
-}
+    //Start Authenticate
+    builder.Services.AddScoped<ILogic<LoginParam, LoginResult>, LoginLogic>();
+    //End
 
+    //Start Shoe Check
+    builder.Services.AddScoped<ILogic<GetListShoeCheckParam, GetListShoeCheckResult>, GetListShoeCheckLogic>();
+    //End
+}
 static void RegisterRepository(WebApplicationBuilder builder)
 {
     // Add Configuration
     builder.Services.AddDbContext<FreeCheckDbContext>(option => option.UseSqlServer("name=ConnectionStrings:FreeCheckDb"));
     builder.Services.AddScoped<IShoeCheckRepository, ShoeCheckRepository>();
+}
+static void RegisterLogger(WebApplicationBuilder builder)
+{
+    Log.Logger = new LoggerConfiguration()
+        .ReadFrom.Configuration(builder.Configuration).CreateLogger();
+    builder.Host.UseSerilog();
+}
+static void RegisterLibraries(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IJwtToken, JwtToken>();
+    //builder.Services.AddTransient<AuthorizeAdminAttribute>();
+    //builder.Services.AddTransient<AuthorizeUserAttribute>();
 }

@@ -13,7 +13,6 @@ namespace FreeCheck.Gateway.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [TypeFilter(typeof(AuthorizeUserAttribute))]
     public class ShoeController : ControllerBase
     {
         public ILogic<GetListShoeCheckParam, GetListShoeCheckResult> _getListShoeCheckLogic;
@@ -36,8 +35,27 @@ namespace FreeCheck.Gateway.Controllers
             else
             {
                 Log.Error($"End GetListShoeCheck {resultData?.Desc}");
-                return ResponseHelper<GetListShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData.Code, Desc = resultData.Desc } });
+                return ResponseHelper<GetListShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData?.Code ?? "FAIL", Desc = resultData?.Desc ?? "FAIL" } });
             }
         }
+
+        //[TypeFilter(typeof(AuthorizeUserAttribute))]
+        //[HttpGet("Shoes-Authen")]
+        //public ResponseResultData<GetListShoeCheckResult?> GetListShoeCheckAuthen([FromQuery] GetListShoeCheckParam param)
+        //{
+        //    Log.Information("Start GetListShoeCheck {@param}", param);
+        //    var resultData = _getListShoeCheckLogic.Execute(param);
+
+        //    if (resultData?.Result == true)
+        //    {
+        //        Log.Information($"End GetListShoeCheck {resultData.Data}");
+        //        return ResponseHelper<GetListShoeCheckResult>.ResOK(resultData);
+        //    }
+        //    else
+        //    {
+        //        Log.Error($"End GetListShoeCheck {resultData?.Desc}");
+        //        return ResponseHelper<GetListShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData.Code, Desc = resultData.Desc } });
+        //    }
+        //}
     }
 }

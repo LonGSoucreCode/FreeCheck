@@ -92,7 +92,6 @@ static IConfiguration GetConfiguration()
         .AddEnvironmentVariables();
     return builder.Build();
 }
-
 static void RegisterLogic(WebApplicationBuilder builder)
 {
     //Start Authenticate

@@ -1,6 +1,7 @@
 ﻿using FreeCheck.DTO.Params;
 using FreeCheck.DTO.Results;
 using FreeCheck.Repository.Infrastructure.Repositories.Interfaces;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace FreeCheck.BusinessLogic.GhoeCheckLogic
         {
             try
             {
+                Log.Information("Execute Logic GetListShoeCheck {@param}", param);
                 var resultData = new GetListShoeCheckResult()
                 {
                     Data = new List<GetListShoeResult>(),
@@ -28,10 +30,9 @@ namespace FreeCheck.BusinessLogic.GhoeCheckLogic
                     Code = "FAIL",
                 };
 
-                resultData.Data = _shoeCheckReposity.GetListShoeCheck(param);
-
-                //resultData.Result = true;
-
+                resultData = _shoeCheckReposity.GetListShoeCheck(param);
+                resultData.Result = true;
+                resultData.Code = "SUCCES";
                 return resultData;
             }
             catch (Exception ex)

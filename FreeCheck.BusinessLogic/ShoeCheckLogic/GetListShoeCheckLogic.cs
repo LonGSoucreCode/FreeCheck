@@ -24,7 +24,7 @@ namespace FreeCheck.BusinessLogic.GhoeCheckLogic
                 Log.Information("Execute Logic GetListShoeCheck {@param}", param);
                 var resultData = new GetListShoeCheckResult()
                 {
-                    Data = new List<GetListShoeResult>(),
+                    Data = new List<GetListShoeResultData>(),
                     Pagination = new PaginationResult(),
                     Result = false,
                     Code = "FAIL",
@@ -37,10 +37,11 @@ namespace FreeCheck.BusinessLogic.GhoeCheckLogic
             }
             catch (Exception ex)
             {
+                Log.Error($"Execute Logic GetListShoeCheck Error {ex.Message}");
                 return new GetListShoeCheckResult
                 {
                     Result = false,
-                    Code = "GET_LIST_SHOE_CHECK_FAIL",
+                    Code = "GET_LIST_SHOE_CHECK_ERROR",
                     Desc = ex.Message
                 };
             }

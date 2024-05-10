@@ -6,28 +6,27 @@ using System.Threading.Tasks;
 
 namespace FreeCheck.DTO.Results
 {
-    public class GetListShoeCheckResult : IResult
+    public class GetDetailShoeCheckResult : IResult
     {
-        public List<GetListShoeResultData>? Data { get; set; }
-        public PaginationResult? Pagination { get; set; }
+        public GetDetailShoeResultData? Data { get; set; }
     }
-    public class GetListShoeResultData
+    public class GetDetailShoeResultData
     {
         public Guid Id { get; set; }
         public string Code { get; set; } = "";
         public string Name { get; set; } = "";
         public bool StatusChecker { get; set; }
         public DateTime CheckDateTime { get; set; }
-        public GetListShoeBrandResult ShoeBrand { get; set; } = new GetListShoeBrandResult();
-        public GetListShoeImageResult ShoeImages { get; set; } = new GetListShoeImageResult();
+        public GetDetailShoeBrandResult ShoeBrand { get; set; } = new GetDetailShoeBrandResult();
+        public List<GetDetailShoeImageResult> ShoeImages { get; set; } = new List<GetDetailShoeImageResult>();
     }
-    public class GetListShoeBrandResult
+    public class GetDetailShoeBrandResult
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = "";
         public string ImageUrl { get; set; } = "";
     }
-    public class GetListShoeImageResult
+    public class GetDetailShoeImageResult
     {
         public Guid Id { get; set; }
         public string ImageData { get; set; } = "";

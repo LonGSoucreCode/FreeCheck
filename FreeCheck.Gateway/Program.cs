@@ -14,6 +14,7 @@ using Serilog;
 using FreeCheck.BusinessLogic.AuthenticateLogic;
 using FreeCheck.Helper.JwtToken;
 using FreeCheck.Gateway.Middlewares;
+using FreeCheck.BusinessLogic.ShoeCheckLogic;
 
 
 var configuration = GetConfiguration();
@@ -100,6 +101,7 @@ static void RegisterLogic(WebApplicationBuilder builder)
 
     //Start Shoe Check
     builder.Services.AddScoped<ILogic<GetListShoeCheckParam, GetListShoeCheckResult>, GetListShoeCheckLogic>();
+    builder.Services.AddScoped<ILogic<GetDetailShoeCheckParam, GetDetailShoeCheckResult>, GetDetailShoeCheckLogic>();
     //End
 }
 static void RegisterRepository(WebApplicationBuilder builder)

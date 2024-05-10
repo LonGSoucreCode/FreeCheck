@@ -16,9 +16,11 @@ namespace FreeCheck.Gateway.Controllers
     public class ShoeController : ControllerBase
     {
         public ILogic<GetListShoeCheckParam, GetListShoeCheckResult> _getListShoeCheckLogic;
-        public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic)
+        public ILogic<GetDetailShoeCheckParam, GetDetailShoeCheckResult> _getDetailShoeCheckLogic;
+        public ShoeController(ILogic<GetListShoeCheckParam, GetListShoeCheckResult> getListShoeCheckLogic, ILogic<GetDetailShoeCheckParam, GetDetailShoeCheckResult> getDetailShoeCheckLogic)
         {
             _getListShoeCheckLogic = getListShoeCheckLogic;
+            _getDetailShoeCheckLogic = getDetailShoeCheckLogic;
         }
 
         [HttpGet("Shoes")]
@@ -36,6 +38,23 @@ namespace FreeCheck.Gateway.Controllers
             {
                 Log.Error($"End GetListShoeCheck {resultData?.Desc}");
                 return ResponseHelper<GetListShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData?.Code ?? "FAIL", Desc = resultData?.Desc ?? "FAIL" } });
+            }
+        }
+        [HttpGet("Shoe")]
+        public ResponseResultData<GetDetailShoeCheckResult?> GetDetailShoeCheck([FromQuery] Guid id)
+        {
+            Log.Information("Start GetDetailShoeCheck {@id}", id);
+            var resultData = _getDetailShoeCheckLogic.Execute(new GetDetailShoeCheckParam { Id = id});
+
+            if (resultData?.Result == true)
+            {
+                Log.Information($"End GetDetailShoeCheck {resultData.Data}");
+                return ResponseHelper<GetDetailShoeCheckResult>.ResOK(resultData);
+            }
+            else
+            {
+                Log.Error($"End GetDetailShoeCheck {resultData?.Desc}");
+                return ResponseHelper<GetDetailShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData?.Code ?? "FAIL", Desc = resultData?.Desc ?? "FAIL" } });
             }
         }
 

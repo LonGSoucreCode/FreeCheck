@@ -11,6 +11,7 @@ namespace FreeCheck.Repository.Infrastructure.Repositories.Interfaces
 {
     public interface IShoeCheckRepository
     {
-        public GetListShoeCheckResult GetListShoeCheck(GetListShoeCheckParam param);
+        public GetListShoeCheckResult? GetListShoeCheck(GetListShoeCheckParam param);
+        public GetDetailShoeResultData? GetDetailShoeCheck(GetDetailShoeCheckParam param);
     }
 }

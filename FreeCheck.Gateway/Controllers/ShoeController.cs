@@ -41,7 +41,7 @@ namespace FreeCheck.Gateway.Controllers
             }
         }
         [HttpGet("{id}")]
-        public ResponseResultData<GetDetailShoeCheckResult?> GetDetailShoeCheck([FromQuery] Guid id)
+        public ResponseResultData<GetDetailShoeCheckResult?> GetDetailShoeCheck(Guid id)
         {
             Log.Information("Start GetDetailShoeCheck {@id}", id);
             var resultData = _getDetailShoeCheckLogic.Execute(new GetDetailShoeCheckParam { Id = id});

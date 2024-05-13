@@ -15,6 +15,7 @@ using FreeCheck.BusinessLogic.AuthenticateLogic;
 using FreeCheck.Helper.JwtToken;
 using FreeCheck.Gateway.Middlewares;
 using FreeCheck.BusinessLogic.ShoeCheckLogic;
+using FreeCheck.BusinessLogic.BrandCheckLogic;
 
 
 var configuration = GetConfiguration();
@@ -103,12 +104,19 @@ static void RegisterLogic(WebApplicationBuilder builder)
     builder.Services.AddScoped<ILogic<GetListShoeCheckParam, GetListShoeCheckResult>, GetListShoeCheckLogic>();
     builder.Services.AddScoped<ILogic<GetDetailShoeCheckParam, GetDetailShoeCheckResult>, GetDetailShoeCheckLogic>();
     //End
+
+    //Start Brand Check
+    builder.Services.AddScoped<ILogic<GetListBrandCheckParam, GetListBrandCheckResult>, GetListBrandCheckLogic>();
+    builder.Services.AddScoped<ILogic<UpdateBrandCheckParam, UpdateBrandCheckResult>, UpdateBrandCheckLogic>();
+    builder.Services.AddScoped<ILogic<DeleteBrandCheckParam, DeleteBrandCheckResult>, DeleteBrandCheckLogic>();
+    //End
 }
 static void RegisterRepository(WebApplicationBuilder builder)
 {
     // Add Configuration
     builder.Services.AddDbContext<FreeCheckDbContext>(option => option.UseSqlServer("name=ConnectionStrings:FreeCheckDb"));
     builder.Services.AddScoped<IShoeCheckRepository, ShoeCheckRepository>();
+    builder.Services.AddScoped<IBrandCheckRepository, BrandCheckRepository>();
 }
 static void RegisterLogger(WebApplicationBuilder builder)
 {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreeCheck.BusinessLogic.BrandCheckLogic
 {
-    public class GetListBrandCheck : ILogic<GetListBrandCheckParam, GetListBrandCheckResult>
+    public class GetListBrandCheckLogic : ILogic<GetListBrandCheckParam, GetListBrandCheckResult>
     {
         public GetListBrandCheckResult Execute(GetListBrandCheckParam param)
         {

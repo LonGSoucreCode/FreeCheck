@@ -10,6 +10,6 @@ namespace FreeCheck.Repository.Infrastructure.Repositories.Interfaces
 {
     public interface IBrandCheckRepository
     {
-        public GetListBrandCheckResult? GetListShoeCheck(GetListBrandCheckParam param);
+        public GetListBrandCheckResult? GetListBrandCheck(GetListBrandCheckParam param);
     }
 }

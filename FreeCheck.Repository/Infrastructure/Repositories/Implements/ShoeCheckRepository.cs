@@ -16,7 +16,7 @@ namespace FreeCheck.Repository.Infrastructure.Repositories.Implements
     public class ShoeCheckRepository : IShoeCheckRepository
     {
         private readonly FreeCheckDbContext _freeCheckDbContext;
-        private FakeData fakeData = new FakeData();
+        private FakeDataShoeCheck fakeData = new FakeDataShoeCheck();
         public ShoeCheckRepository(FreeCheckDbContext freeCheckDbContext)
         {
             _freeCheckDbContext = freeCheckDbContext;
@@ -106,7 +106,7 @@ namespace FreeCheck.Repository.Infrastructure.Repositories.Implements
         }
     }
 
-    public class FakeData
+    public class FakeDataShoeCheck
     {
         public Guid brandId = Guid.NewGuid();
         public List<GetListShoeResultData> FakeDataShoe = new List<GetListShoeResultData>();
@@ -151,7 +151,7 @@ namespace FreeCheck.Repository.Infrastructure.Repositories.Implements
             "a0aa7d1d-7acd-4177-bfa1-ecc42f007e4c"
         };
 
-        public FakeData()
+        public FakeDataShoeCheck()
         {
             var Images = new GetListShoeImageResult
             {

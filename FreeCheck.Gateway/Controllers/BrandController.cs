@@ -44,7 +44,7 @@ namespace FreeCheck.Gateway.Controllers
             }
         }
 
-        [HttpPatch("{id}")]
+        [HttpPatch("update")]
         public ResponseResultData<UpdateBrandCheckResult?> UpdateBrandCheck([FromBody] UpdateBrandCheckParam param)
         {
             Log.Information("Start UpdateBrandCheck {@param}", param);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FreeCheck.DTO.Results
 {
-    public class DeteleBrandCheckResult : IResult
+    public class DeleteBrandCheckResult : IResult
     {
         public DeleteBrandResultData? Data { get; set; }
     }

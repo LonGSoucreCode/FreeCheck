@@ -12,7 +12,7 @@ using Serilog;
 namespace FreeCheck.Gateway.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/shoe")]
     public class ShoeController : ControllerBase
     {
         public ILogic<GetListShoeCheckParam, GetListShoeCheckResult> _getListShoeCheckLogic;
@@ -23,7 +23,7 @@ namespace FreeCheck.Gateway.Controllers
             _getDetailShoeCheckLogic = getDetailShoeCheckLogic;
         }
 
-        [HttpGet("Shoes")]
+        [HttpGet("shoes")]
         public ResponseResultData<GetListShoeCheckResult?> GetListShoeCheck([FromQuery] GetListShoeCheckParam param)
         {
             Log.Information("Start GetListShoeCheck {@param}", param);
@@ -40,7 +40,7 @@ namespace FreeCheck.Gateway.Controllers
                 return ResponseHelper<GetListShoeCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData?.Code ?? "FAIL", Desc = resultData?.Desc ?? "FAIL" } });
             }
         }
-        [HttpGet("Shoe")]
+        [HttpGet("{id}")]
         public ResponseResultData<GetDetailShoeCheckResult?> GetDetailShoeCheck([FromQuery] Guid id)
         {
             Log.Information("Start GetDetailShoeCheck {@id}", id);

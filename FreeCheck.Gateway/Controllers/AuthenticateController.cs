@@ -14,7 +14,7 @@ using FreeCheck.DTO.Params;
 namespace FreeCheck.Gateway.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/authenticate")]
     public class AuthenticateController : Controller
     {
 
@@ -39,7 +39,7 @@ namespace FreeCheck.Gateway.Controllers
         //    return Ok(user);
         //}
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public LoginResult Login(LoginParam param)
         {
             var resultData = _loginLogic.Execute(param);

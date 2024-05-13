@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FreeCheck.DTO.Params
 {
-    public class DeteleBrandCheckParam
+    public class DeleteBrandCheckParam
     {
         public required Guid Id { get; set; }
     }

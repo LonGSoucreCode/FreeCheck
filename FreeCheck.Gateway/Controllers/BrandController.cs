@@ -10,39 +10,42 @@ using Serilog;
 namespace FreeCheck.Gateway.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/brand")]
     [TypeFilter(typeof(AuthorizeUserAttribute))]
     public class BrandController : ControllerBase
     {
         public ILogic<GetListBrandCheckParam, GetListBrandCheckResult> _getListBrandLogic;
         public ILogic<UpdateBrandCheckParam, UpdateBrandCheckResult> _updateBrandLogic;
+        public ILogic<DeleteBrandCheckParam, DeleteBrandCheckResult> _deleteBrandLogic;
         public BrandController(ILogic<GetListBrandCheckParam, GetListBrandCheckResult> getListBrandLogic, 
-                               ILogic<UpdateBrandCheckParam, UpdateBrandCheckResult> updateBrandLogic) 
+                               ILogic<UpdateBrandCheckParam, UpdateBrandCheckResult> updateBrandLogic,
+                               ILogic<DeleteBrandCheckParam, DeleteBrandCheckResult> deleteBrandLogic) 
         {
             _getListBrandLogic = getListBrandLogic;
             _updateBrandLogic = updateBrandLogic;
+            _deleteBrandLogic = deleteBrandLogic;
         }
 
         [HttpGet("brands")]
-        public ResponseResultData<GetListBrandCheckResult?> GetListBrand([FromQuery]GetListBrandCheckParam param)
+        public ResponseResultData<GetListBrandCheckResult?> GetListBrandCheck([FromQuery]GetListBrandCheckParam param)
         {
             Log.Information("Start GetListBrandCheck {@param}", param);
             var resultData = _getListBrandLogic.Execute(param);
 
             if (resultData?.Result == true)
             {
-                Log.Information($"End GetDetailShoeCheck {resultData.Data}");
+                Log.Information($"End GetListBrandCheck {resultData.Data}");
                 return ResponseHelper<GetListBrandCheckResult>.ResOK(resultData);
             }
             else
             {
-                Log.Error($"End GetDetailShoeCheck {resultData?.Desc}");
+                Log.Error($"End GetListBrandCheck {resultData?.Desc}");
                 return ResponseHelper<GetListBrandCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData?.Code ?? "FAIL", Desc = resultData?.Desc ?? "FAIL" } });
             }
         }
 
-        [HttpPatch("brand")]
-        public ResponseResultData<UpdateBrandCheckResult?> UpdateDetailBrand([FromBody] UpdateBrandCheckParam param)
+        [HttpPatch("{id}")]
+        public ResponseResultData<UpdateBrandCheckResult?> UpdateBrandCheck([FromBody] UpdateBrandCheckParam param)
         {
             Log.Information("Start UpdateBrandCheck {@param}", param);
             var resultData = _updateBrandLogic.Execute(param);
@@ -59,6 +62,22 @@ namespace FreeCheck.Gateway.Controllers
             }
         }
 
-        []
+        [HttpDelete("{id}")]
+        public ResponseResultData<DeleteBrandCheckResult?> DeleteBrandCheck(Guid id)
+        {
+            Log.Information("Start DeleteBrandCheck {@id}", id);
+            var resultData = _deleteBrandLogic.Execute(new DeleteBrandCheckParam { Id = id});
+
+            if (resultData?.Result == true)
+            {
+                Log.Information($"End DeleteBrandCheck {resultData.Data}");
+                return ResponseHelper<DeleteBrandCheckResult>.ResOK(resultData);
+            }
+            else
+            {
+                Log.Error($"End DeleteBrandCheck {resultData?.Desc}");
+                return ResponseHelper<DeleteBrandCheckResult>.ResFailed(new List<Message> { new Message { Code = resultData?.Code ?? "FAIL", Desc = resultData?.Desc ?? "FAIL" } });
+            }
+        }
     }
 }
